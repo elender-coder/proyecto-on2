@@ -1,0 +1,131 @@
+<html>
+ <head>
+   <link rel="stylesheet" href="bootstrap-diego/css/bootstrap.min.css">
+    <script type="text/javascript" src="bootstrap-diego/js/bootstrap.bundle.min.js"></script>
+    <title>on</title>
+    <style>
+
+
+    .menu-colores button{
+    }
+
+
+    </style>
+    <script>
+    function mostrarColor(color){
+
+      let productos = document.querySelectorAll(".product");
+
+      productos.forEach(p=>{
+        if(p.classList.contains(color)){
+          p.style.display="block";
+        }else{
+          p.style.display="none";
+        }
+      });
+    }
+    </script>
+  </head>
+  <body style="margin:0;font-family:Arial;background:#f5f5f5;">
+
+    <div class="container-fluid" style="background-color:black">
+        <div class="row">
+
+              <div class="col-lg-2">
+                <p style="color:white"></p>
+                 <a href="on principal.html">
+                <img src="on.png"width="20%">
+              </a>
+              </div>
+              <div class="col-lg-2">
+                <br>
+              </div>
+              <div class="col-lg-5">
+                <h1 style="color:white"> TODOS LOS PRODUCTOS</h1>
+              </div>
+            </div>
+        </div>
+        <div class="menu-colores" style="text-align:center;padding:20px;">
+        <button onclick="mostrarColor('negro')"style="margin:5px;padding:10px 20px;border:none;background:#333;color:white;cursor:pointer;border-radius:5px;">Negro</button>
+        <button onclick="mostrarColor('blanco')"style="margin:5px;padding:10px 20px;border:none;background:#333;color:white;cursor:pointer;border-radius:5px;">Blanco</button>
+        <button onclick="mostrarColor('azul')"style="margin:5px;padding:10px 20px;border:none;background:#333;color:white;cursor:pointer;border-radius:5px;">Azul</button>
+        <button onclick="mostrarColor('verde')"style="margin:5px;padding:10px 20px;border:none;background:#333;color:white;cursor:pointer;border-radius:5px;">verde</button>
+        <button onclick="mostrarColor('todos')"style="margin:5px;padding:10px 20px;border:none;background:#333;color:white;cursor:pointer;border-radius:5px;">Todos</button>
+        </div>
+        <div class="container" style="display:flex; justify-content:center; gap:30px; flex-wrap:wrap; padding:30px;">
+        <div class=" product negro product todos"style="background:white;width:220px;padding:20px;border-radius:10px;text-align:center;box-shadow:0 4px 10px rgba(0,0,0,0.1);">
+        <img src="waterproof.avif" style="width:100%">
+        <h3>cloud 6 waterproof</h3>
+        <a href="waterproof.html">
+        <p class="price" style="font-size:20px;color:#0077ff;">$180</p>
+        </a>
+        </div>
+        <div class="product verde product todos"style="background:white;width:220px;padding:20px;border-radius:10px;text-align:center;box-shadow:0 4px 10px rgba(0,0,0,0.1);">
+        <img src="cloud6.avif" style="width:100%">
+        <h3>On Cloud6</h3>
+        <a  href="cloud6.html">
+        <p class="price"style="font-size:20px;color:#0077ff;">$160</p>
+        </a>
+        </div>
+        <div class="product negro product todos"style="background:white;width:220px;padding:20px;border-radius:10px;text-align:center;box-shadow:0 4px 10px rgba(0,0,0,0.1);">
+        <img src="zapatohombre1.avif" style="width:100%">
+        <h3>Cloudmonster 3 negros</h3>
+        <a  href="cloudmonster 3.html">
+        <p class="price" style="font-size:20px;color:#0077ff;">$190</p>
+        </a>
+        </div>
+        <div class="product azul product todos"style="background:white;width:220px;padding:20px;border-radius:10px;text-align:center;box-shadow:0 4px 10px rgba(0,0,0,0.1);">
+        <img src="wide.avif" style="width:100%">
+        <h3>cloumonster 3 wide</h3>
+        <a  href="wide.html">
+        <p class="price"style="font-size:20px;color:#0077ff;">$190</p>
+        </a>
+        </div>
+        <div class="product blanco product todos"style="background:white;width:220px;padding:20px;border-radius:10px;text-align:center;box-shadow:0 4px 10px rgba(0,0,0,0.1);">
+          <img src="roger.avif" style="width:100%">
+        <h3>THE ROGER clubhouse pro</h3>
+        <a  href="roger.html">
+        <p class="price"style="font-size:20px;color:#0077ff;">$170</p>
+        </a>
+        </div>
+        <div class="product blanco product todos"style="background:white;width:220px;padding:20px;border-radius:10px;text-align:center;box-shadow:0 4px 10px rgba(0,0,0,0.1);">
+          <img src="nova2.avif" style="width:100%">
+        <h3>cloudnova form 2</h3>
+        <a  href="nova2.html">
+        <p class="price"style="font-size:20px;color:#0077ff;">$170</p>
+        </a>
+        </div>
+        <div class="product negro product todos"style="background:white;width:220px;padding:20px;border-radius:10px;text-align:center;box-shadow:0 4px 10px rgba(0,0,0,0.1);">
+          <img src="nova3.avif" style="width:100%">
+        <h3>cloudnova 2</h3>
+        <a  href="nova3.html">
+        <p class="price"style="font-size:20px;color:#0077ff;">$170</p>
+        </a>
+        </div>
+        <div class="product negro product todos"style="background:white;width:220px;padding:20px;border-radius:10px;text-align:center;box-shadow:0 4px 10px rgba(0,0,0,0.1);">
+          <img src="max.avif" style="width:100%">
+        <h3>cloudsurfer max</h3>
+        <a  href="max.html">
+        <p class="price"style="font-size:20px;color:#0077ff;">$180</p>
+        </a>
+        </div>
+        <div class="product negro todos "style="background:white;width:220px;padding:20px;border-radius:10px;text-align:center;box-shadow:0 4px 10px rgba(0,0,0,0.1);">
+          <img src="void.avif" style="width:100%">
+        <h3>cloudmonster void</h3>
+        <a  href="void.html">
+        <p class="price"style="font-size:20px;color:#0077ff;">$170</p>
+        </a>
+        </div>
+        <div class="product negro todos" style="background:white;width:220px;padding:20px;border-radius:10px;text-align:center;box-shadow:0 4px 10px rgba(0,0,0,0.1);">
+         <img src="zone.avif" style="width:100%">
+        <h3>cloudzone</h3>
+        <a  href="zone.html">
+        <p class="price"style="font-size:20px;color:#0077ff;">$170</p>
+        </a>
+        </div>
+        </div>
+        <a href="on tenis.html" style="text-align:center" ><h3 style="text-align:center"> regresar</a> o <a href="on tenis3.html" style="text-align:center"> siguiente</a></h3>
+        <footer style="background:black;color:white;padding:20px;text-align:center;">
+        <p>© on</p>
+        </footer>
+  </body>
