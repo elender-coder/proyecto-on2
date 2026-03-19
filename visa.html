@@ -1,28 +1,208 @@
-<html>
+<!DOCTYPE html>
+<html lang="es">
 <head>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js">
-  </script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js">
-  </script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js">
-  </script>
-  <link rel="stylesheet" href="bootstrap-diego/css/bootstrap.min.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pasarela de Pago</title>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="bootstrap-diego/css/bootstrap.min.css">
+
+    <script src="https://js.stripe.com/v3/"></script>
+
+    <style>
+        /* Estilos de la Interfaz */
+        body {
+            background: black;
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        h1 {
+            text-align: center;
+            color: white;
+            margin-bottom: 20px;
+        }
+
+        .targeta {
+            text-align: center;
+            background: white;
+            width: 350px;
+            padding: 30px;
+            margin: auto;
+            border-radius: 15px;
+            box-shadow: 0px 10px 30px rgba(255, 255, 255, 0.1);
+        }
+
+        /* Estilo del contenedor del input de Stripe */
+        #card-element {
+            border: 1px solid #ced4da;
+            padding: 12px;
+            border-radius: 8px;
+            background: #f8f9fa;
+            margin-bottom: 20px;
+        }
+
+        /* Botón de Pago Estilizado */
+        #boton-pagar {
+            background: black;
+            border: 1px solid black;
+            border-radius: 25px;
+            color: white;
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s, background 0.3s;
+        }
+
+        #boton-pagar:hover {
+            background: #333;
+            transform: scale(1.02);
+        }
+
+        #boton-pagar:disabled {
+            background: #666;
+            cursor: not-allowed;
+        }
+
+        /* Mensajes de Resultado */
+        #resultado {
+            margin-top: 20px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .error { color: #dc3545; }
+        .exito { color: #28a745; }
+        .procesando { color: #007bff; }
+    </style>
 </head>
-<body style=" background:black">
-  <h1  style="text-align:center;color:white"> forma de Pago</h1>
-  <div class="targeta" style="text-align:center;background:white;width:320px;padding:20px;margin:auto;margin-top:100px;border-radius:10px;box-shadow:0px 0px 10px gray;">
-    <select style="text-align:center;background:black;border:1px solid black;border-radius:20px;color:white;">
-    <option>visa</option>
-    <option>mastercard</option>
-    <option>American Expres</option>
-    </select>
-    <br></br>
-    <input type="text" placeholder="Nombre en la tarjeta">
-    <input type="text" placeholder="300 000 000 000">
-    <input type="text" placeholder="fecha/26/12/31">
-    <input type="password" placeholder="ccv/123">
-    <br></br>
-    <a href="gracias.html">
-    <button type="btn btn-dark" style="background:black;border:1px solid black;border-radius:20px;color:white">comprar</button>
-    </a>
+<body>
+
+    <h1>Forma de Pago</h1>
+
+    <div class="targeta">
+        <form id="payment-form">
+            <div id="card-element"></div>
+
+            <button id="boton-pagar" type="submit">
+                CONFIRMAR COMPRAR
+            </button>
+        </form>
+
+        <p id="resultado"></p>
+    </div>
+
+    <script>
+        // 1. Configuración inicial con tu clave pública
+        const stripe = Stripe("pk_test_51TCSpfFM4eqJ40WCnmhfPBTfT54mamyUCCvV06xopTRpLnE3jMKpQRt643bh6qLogqNrQwZ2wUaO7Ep6cQVIdXJO00BxP7X4MS");
+        const elements = stripe.elements();
+
+        // Personalización visual del input de Stripe
+        const style = {
+            base: {
+                color: "#32325d",
+                fontFamily: 'Arial, sans-serif',
+                fontSmoothing: "antialiased",
+                fontSize: "16px",
+                "::placeholder": {
+                    color: "#aab7c4"
+                }
+            },
+            invalid: {
+                color: "#fa755a",
+                iconColor: "#fa755a"
+            }
+        };
+
+        // AQUÍ ACTIVAMOS EL CÓDIGO POSTAL:
+        // Por defecto hidePostalCode es false, lo que hace que Stripe pida el código postal.
+        const card = elements.create("card", {
+            style: style,
+            hidePostalCode: false
+        });
+
+        card.mount("#card-element");
+
+        // 2. Manejo del envío del formulario
+        const form = document.getElementById("payment-form");
+        const mensajeResultado = document.getElementById("resultado");
+        const btnPagar = document.getElementById("boton-pagar");
+
+        form.addEventListener("submit", async (event) => {
+            event.preventDefault(); // Evita que la página se recargue
+
+            // Bloquear botón y mostrar estado
+            btnPagar.disabled = true;
+            mensajeResultado.innerText = "Procesando pago seguro...";
+            mensajeResultado.className = "procesando";
+
+            try {
+                // LLAMADA AL SERVIDOR: Enviamos el monto de 180 USD (18000 centavos)
+                const respuestaServidor = await fetch("/crear-pago.php", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ amount: 18000 })
+                });
+
+                const data = await respuestaServidor.json();
+
+                if (data.error) {
+                    throw new Error(data.error);
+                }
+
+                // CONFIRMACIÓN CON STRIPE: Procesa el pago con la tarjeta ingresada
+                const result = await stripe.confirmCardPayment(data.clientSecret, {
+                    payment_method: {
+                        card: card
+                    }
+                });
+
+                if (result.error) {
+                    // Si Stripe detecta un error (fondos insuficientes, tarjeta expirada, etc.)
+                    mensajeResultado.innerText = "❌ " + result.error.message;
+                    mensajeResultado.className = "error";
+                    btnPagar.disabled = false;
+                } else {
+                    // Si el pago es exitoso
+                    if (result.paymentIntent.status === "succeeded") {
+                        mensajeResultado.innerText = "✅ ¡Pago Exitoso! Redirigiendo...";
+                        mensajeResultado.className = "exito";
+
+                        // Redirección automática tras 2 segundos
+                        setTimeout(() => {
+                            window.location.href = "gracias.html";
+                        }, 2000);
+                    }
+                }
+
+            } catch (error) {
+                mensajeResultado.innerText = "❌ Error en la conexión con el servidor.";
+                mensajeResultado.className = "error";
+                btnPagar.disabled = false;
+                console.error("Detalle del error:", error);
+            }
+        });
+
+        // Validación en tiempo real del input de la tarjeta
+        card.on('change', (event) => {
+            if (event.error) {
+                mensajeResultado.innerText = event.error.message;
+                mensajeResultado.className = "error";
+            } else {
+                mensajeResultado.innerText = "";
+            }
+        });
+    </script>
+
+</body>
+</html>
